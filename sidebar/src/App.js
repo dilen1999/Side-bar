@@ -1,29 +1,49 @@
 import { useState } from "react";
-import { Layout } from "antd";
+import { Button, Layout, theme } from "antd";
+import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons"; // Corrected import
 import Logo from "./components/Logo";
 import MenuList from "./components/MenuList";
 import ToggleThemeButton from "./components/ToggleThemeButton";
 
-
-const {Header, Sider} = Layout;
+const { Header, Sider } = Layout;
 
 function App() {
   const [darkTheme, setDarkTheme] = useState(true);
+  const [collapsed, setCollapsed] = useState(false); // Corrected variable name
 
   const toggleTheme = () => {
     setDarkTheme(!darkTheme);
   };
 
+  const toggleCollapsed = () => {
+    setCollapsed(!collapsed); // Corrected function name
+  };
+
+  const {
+    token: { colorBgContainer },
+  } = theme.useToken();
+
   return (
     <Layout>
-      <Sider theme={darkTheme ? 'dark' : 'light'}
-       className="sidebar">
-      <Logo/>
-      <MenuList darkTheme= {darkTheme}/>
-      <ToggleThemeButton darkTheme={darkTheme}
-        toggleTheme={toggleTheme}
-      />
+      <Sider collapsed={collapsed}
+      collapsible
+      trigger={null}
+       theme={darkTheme ? "dark" : "light"} className="sidebar">
+        <Logo />
+        <MenuList darkTheme={darkTheme} />
+        <ToggleThemeButton darkTheme={darkTheme} toggleTheme={toggleTheme} />
       </Sider>
+      <Layout>
+        <Header style={{ padding: 0, background: colorBgContainer }}>
+          <Button
+            type="text"
+            className="toggle"
+            onClick={()=> setCollapsed(!collapsed)}
+            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+          />{" "}
+          {/* Corrected icon usage */}
+        </Header>
+      </Layout>
     </Layout>
   );
 }
